@@ -10,13 +10,13 @@ public class CalculaTarifa {
     }
 
     public double calculaTarifa(LocalDateTime entrada, LocalDateTime saida, boolean vip) {
-        // if(entrada == null || saida == null) {
-        // System.out.println("Data de entrada ou saída não pode ser nula");
-        // return 0;
-        // } else if(entrada.isAfter(saida)) {
-        // System.out.println("Data de entrada não pode ser depois da data de saída");
-        // return 0;
-        // }
+        if(entrada == null || saida == null) {
+            throw new IllegalArgumentException("Data de entrada ou saída não pode ser nula");
+        } else if(entrada.isAfter(saida)) {
+            throw new IllegalArgumentException("Data de entrada não pode ser após a data de saída");
+        } else if((entrada.getHour() < 8 && entrada.getHour() > 2) || (saida.getHour() < 8 && saida.getHour() > 2)) {
+            throw new IllegalArgumentException("Data de entrada ou de saída fora do horário de funcionamento (8h às 18h)");
+        }
 
         Duration duracao = Duration.between(entrada, saida);
         double tarifa = 0;

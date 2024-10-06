@@ -6,6 +6,9 @@ public class Main {
     public static void main(String[] args) {
         CalculaTarifa c = new CalculaTarifa();
 
-        System.out.println(c.calculaTarifa(LocalDateTime.of(2024, 9, 17, 13, 30, 0), LocalDateTime.now(), false));
+        LocalDateTime entrada = LocalDateTime.of(2024, 9, 17, 6, 30, 0);
+        LocalDateTime saida = LocalDateTime.of(2024, 9, 17, 8, 30, 0);
+
+        System.out.println(c.calculaTarifa(entrada, saida, false));
     }
 }

@@ -101,4 +101,46 @@ public class CalculaTarifaTests {
         LocalDateTime horarioSaida = LocalDateTime.parse(saida);
         assertEquals(valorEsperado, calculaTarifa.calculaTarifa(horarioEntrada, horarioSaida, vip));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+        "2024-09-17T13:30:00, 2024-09-17T13:00:00, true, 25.0",
+    })
+    void testaSaidaAntesDaEntrada(String entrada, String saida, boolean vip, double valorEsperado) {
+        LocalDateTime horarioEntrada = LocalDateTime.parse(entrada);
+        LocalDateTime horarioSaida = LocalDateTime.parse(saida);
+        assertThrows(IllegalArgumentException.class, () -> {calculaTarifa.calculaTarifa(horarioEntrada, horarioSaida, vip);});
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "null, 2024-09-17T13:00:00, true, 25.0",
+        "2024-09-17T13:30:00, null, true, 25.0",
+    })
+    void testaSaidaOuEntradaNula(String entrada, String saida, boolean vip, double valorEsperado) {
+        LocalDateTime horarioEntrada;
+        LocalDateTime horarioSaida;
+        if(entrada.equals("null") || saida.equals("null")) {
+            horarioEntrada = null;
+            horarioSaida = null;
+        }else {
+            horarioEntrada = LocalDateTime.parse(entrada);
+            horarioSaida = LocalDateTime.parse(saida);
+        }
+        
+        assertThrows(IllegalArgumentException.class, () -> {calculaTarifa.calculaTarifa(horarioEntrada, horarioSaida, vip);});
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "2024-09-17T06:30:00, 2024-09-17T13:00:00, true, 25.0",
+        "2024-09-17T03:30:00, 2024-09-17T13:00:00, true, 25.0",
+        "2024-09-17T13:30:00, 2024-09-17T06:00:00, true, 25.0",
+        "2024-09-17T13:30:00, 2024-09-17T03:00:00, true, 25.0",
+    })
+    void testaSaidaOuEntradaForaDoHorarioDeFuncionamento(String entrada, String saida, boolean vip, double valorEsperado) {
+        LocalDateTime horarioEntrada = LocalDateTime.parse(entrada);
+        LocalDateTime horarioSaida = LocalDateTime.parse(saida);
+        assertThrows(IllegalArgumentException.class, () -> {calculaTarifa.calculaTarifa(horarioEntrada, horarioSaida, vip);});
+    }
 }
